@@ -1,10 +1,11 @@
-class Piece{
+class Piece {
   public String color;
   public String type;
   public String value;
   public int[][] pos;
   public boolean legalmove;
-  public Piece(string color,string type,string value,int[][] pos){
+
+  public Piece(string color, string type, string value, int[][] pos) {
     this.color = color;
     this.type = type;
     this.value = value;
@@ -12,28 +13,32 @@ class Piece{
   }
 
 }
-class Pawn extends Piece{
-  public Pawn(){
+
+class Pawn extends Piece {
+  public Pawn() {
     super();
     this.type = "Pawn";
     this.value = "1";
   }
-  
-  
+
 }
-class Rook extends Piece{
-  //forward
+
+class Rook extends Piece {
+  // horizontal or vertical directions
 }
-class Knight extends Piece{
-  //L shape
-  
+
+class Knight extends Piece {
+  // L shape
 }
-class Bishop extends Piece{
-// diagonal
+
+class Bishop extends Piece {
+  // diagonal
 }
-class Queen extends Piece{
- //all directions
+
+class Queen extends Piece {
+  // all directions
 }
-class King extends Piece{
-// all directions limited
+
+class King extends Piece {
+  // all directions limited to 1 space
 }
