@@ -1,12 +1,16 @@
+
 import java.awt.Point;
 
 public class Piece {
+
   public String color;
   public String type;
   public int value;
   Point pos;
   public boolean legalmove;
+
   public Piece(String color, String type, int value, Point pos) {
+
     this.color = color;
      this.type = type;
      this.value = value;
@@ -14,8 +18,9 @@ public class Piece {
   }
   public String toString() {
     return this.type;
+  }
 }
-}
+
 
 class Pawn extends Piece {
   //moves forward 1 square
@@ -58,4 +63,7 @@ class King extends Piece {
     super(color, type, value, pos);
   }
 }
+
+
+
 
