@@ -1,7 +1,9 @@
-public class Game {
+public class Game implements Runnable {
 private final int FPS_SET = 20;
+Board board;
   public Game() {
       Thread thread = new Thread();
+      board = new Board();
       thread.start();
     }
 
@@ -15,8 +17,8 @@ private final int FPS_SET = 20;
     while(true) {
      now = System.nanoTime();
       if(now - lastFrame >= timePerFrame) {
-        //display  
-       lastFrame= now;
+      // show the board
+       lastFrame = now;
        frames++;
      }
       if(System.currentTimeMillis() - lastCheck >= 1000) {

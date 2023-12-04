@@ -3,52 +3,59 @@ import java.awt.Point;
 public class Piece {
   public String color;
   public String type;
-  public String value;
+  public int value;
   Point pos;
   public boolean legalmove;
-  // public Piece(String color,String type,String value,Point pos) {
-  //   this.color = color;
-  //   this.type = type;
-  //   this.value = value;
-  //   this.pos = pos;
-  // }
+  public Piece(String color, String type, int value, Point pos) {
+    this.color = color;
+     this.type = type;
+     this.value = value;
+     this.pos = pos;
+  }
+  public String toString() {
+    return this.type;
+}
+}
 
-}
 class Pawn extends Piece {
-  // //forward 1 space
-  // public Pawn() {
-  //  super();
-  // }
-  
-  
+  //moves forward 1 square
+  public Pawn(String color, String type, int value, Point pos) {
+    super(color, type, value, pos);
+  }
 }
+
 class Rook extends Piece {
-  // //forward,backwards,left and right
-  // public Rook() {
-  //   super();
-  // }
+  // moves forward, backwards, right and left
+  public Rook(String color, String type,int value, Point pos) {
+    super(color, type, value, pos);
+  }
 }
+
 class Knight extends Piece {
-  //L shape
-  // public Knight() {
-  //   super();
-  // }
+  // moves in a L shape
+  public Knight(String color, String type, int value, Point pos) {
+    super(color, type, value, pos);
+  }
 }
+
 class Bishop extends Piece {
-// diagonal
-  // public Bishop() {
-  //   super();
-  // }
+  // moves down diagonal lines
+  public Bishop(String color, String type, int value, Point pos) {
+    super(color, type, value, pos);
+  }
 }
+
 class Queen extends Piece {
- //all directions
-  // public Queen() {
-  //   super();
-  // }
+  // moves in both directions of bishops and rooks
+  public Queen(String color, String type,int value, Point pos) {
+    super(color, type, value, pos);
+  }
 }
+
 class King extends Piece {
-// all directions 1 space
-  // public King() {
-  //   super();
-  // }
+  // moves one square in each direction
+  public King(String color, String type, int value, Point pos) {
+    super(color, type, value, pos);
+  }
 }
+
