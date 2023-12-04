@@ -1,8 +1,9 @@
-class PieceManager(){
+class PieceManager{
   public PieceManager(){
-    
+    this.setupBoard();
   }
-  public static void setupBoard(){
+  public void setupBoard(){
+    print("hi");
   }
   public boolean capturePiece(Piece attacker,Piece capturedPiece){
     if (attacker.color == capturedPiece.color){
@@ -12,7 +13,7 @@ class PieceManager(){
     return true;
   }
   public boolean movePiece(Point newpos,Piece piece){
-    board = getBoard()
+    board = getBoard();
     if (board[newpos.x][newpos.y] != null ){  //Checks if piece is in the square we're trying to move onto
       capturePiece(piece,board[newpos.x][newpos.y]);
     }else{                                    // Check if piece can legally move this direction

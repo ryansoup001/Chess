@@ -1,7 +1,7 @@
 class Piece{
-  public string color;
-  public string type;
-  public string value;
+  public String color;
+  public String type;
+  public String value;
   public int[][] pos;
   public boolean legalmove;
   public Piece(string color,string type,string value,int[][] pos){
@@ -13,7 +13,6 @@ class Piece{
 
 }
 class Pawn extends Piece{
-  int[][] moves = 
   public Pawn(){
     super();
     this.type = "Pawn";
