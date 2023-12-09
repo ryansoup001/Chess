@@ -1,15 +1,26 @@
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
-import java.util.Arrays;
-  
-public class Board {
-  public Board(){
+import java.awt.image.BufferedImage;
+import java.awt.Dimension;
+import javax.swing.JPanel;
+import java.awt.Color;
+
+public class Board extends JPanel {
+  BufferedImage chessBoardImg;
+  Display display;
+  Piece[][] board;
+  String[] rows = {"a", "b", "c", "d", "e", "f", "g", "h"};
+  PieceManager pieceManager;
+  public Board() {
+    setPreferredSize(new Dimension(300,300));
     this.makeBoard();
     this.setupBoard();
-    this.showBoard();
-    new PieceManager(this);
+    chessBoardImg = this.getBoardImg();
+    display = new Display(this);
+    pieceManager = new PieceManager(this);
   }
-  Piece[][] board;
-  public Piece[][] makeBoard() {
+  public void makeBoard() {
     Piece[][] board = new Piece[8][8];
     for (int r = 0; r < board.length; r++) {
       for (int c = 0; c < board[r].length; c++) {
@@ -17,10 +28,14 @@ public class Board {
       }
     }
     this.board = board;
-    return board;
   }
   public Piece[][] getBoard() {
    return this.board;
+  }
+  public BufferedImage getBoardImg() {
+    ImageHandler imghandle = new ImageHandler();
+    BufferedImage boardImg = imghandle.setup("/assets/brown.png");
+    return boardImg;
   }
   public void setupBoard() {
     //Placing Pawns
@@ -55,12 +70,29 @@ public class Board {
     board[3][0] = new King("white","King",10,new Point(0,4));
     board[3][7] = new King("black","King",10,new Point(0,4));
   }
-  public void showBoard() {
-    for (Piece[] row : this.board){
-      System.out.println(Arrays.toString(row));
+  public void showBoard(Graphics g) {
+    // System.out.print("\033[H\033[2J");
+    // System.out.flush();
+    // for (Piece[] row : this.board){
+    //   System.out.println(Arrays.toString(row));
+    // }
+    g.drawImage(chessBoardImg,0,0,300,300,null);
+    for (int r = 0; r < this.board.length; r++) {
+      for (int c  = 0; c < this.board[r].length;c++) {
+        if (this.board[r][c] != null) {
+          g.drawImage(this.board[r][c].getImage(),0,0,30,30,null);
+        }
+      }
     }
   }
-  public void getBoard(Piece[][] newBoard) {
+  public void updateBoard(Piece[][] newBoard) {   // Dont think i need this but keeping it just in case
    this.board = newBoard;
+  }
+  
+  public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    this.showBoard(g);
+    
+    g.dispose();
   }
 }

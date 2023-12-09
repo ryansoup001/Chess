@@ -1,24 +1,36 @@
-
 import java.awt.Point;
-
+import java.awt.image.BufferedImage;
 public class Piece {
-
+  public ImageHandler imgHndle = new ImageHandler();
   public String color;
   public String type;
   public int value;
   Point pos;
-  public boolean legalmove;
 
   public Piece(String color, String type, int value, Point pos) {
-
     this.color = color;
      this.type = type;
      this.value = value;
      this.pos = pos;
   }
+  public boolean move(Point newpos) {
+    return true;
+  }
+  public boolean capturePiece( Piece capturedPiece) {
+    if (capturedPiece.color == this.color) {
+      return false;
+    }
+    // Define attack Patterns
+    return true;
+  }
+  public BufferedImage getImage() {
+    BufferedImage image = imgHndle.setup("/assets/" + this.color.substring(0, 1)  + this.type.substring(0,1) + ".png");
+    return image;
+  }
   public String toString() {
     return this.type;
   }
+  
 }
 
 
@@ -27,6 +39,12 @@ class Pawn extends Piece {
   public Pawn(String color, String type, int value, Point pos) {
     super(color, type, value, pos);
   }
+  public boolean move(Point newpos) {
+    if (this.pos.y == (newpos.y - 1)){
+      return true;
+    }
+    return true;
+  }
 }
 
 class Rook extends Piece {
@@ -34,12 +52,17 @@ class Rook extends Piece {
   public Rook(String color, String type,int value, Point pos) {
     super(color, type, value, pos);
   }
+
 }
 
 class Knight extends Piece {
   // moves in a L shape
   public Knight(String color, String type, int value, Point pos) {
     super(color, type, value, pos);
+  }
+  public BufferedImage getImage() {
+    BufferedImage image = imgHndle.setup("/assets/" + this.color.substring(0, 1)  + "N.png");
+    return image;
   }
 }
 
