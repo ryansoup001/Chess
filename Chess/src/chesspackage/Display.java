@@ -1,9 +1,10 @@
 package chesspackage;
+
 import javax.swing.JFrame;
 
-public class Display {
+public class Display{
   public JFrame jframe;
-  public Display(Board board) {
+  	public Display(Board board) {
     jframe = new JFrame();
     jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     jframe.setLocationRelativeTo(null);
@@ -11,5 +12,5 @@ public class Display {
     jframe.setResizable(false);
     jframe.pack();
     jframe.setVisible(true);
-  }
+  	}
 }

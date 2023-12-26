@@ -20,6 +20,7 @@ public class Board extends JPanel {
     chessBoardImg = this.getBoardImg();
     display = new Display(this);
     pieceManager = new PieceManager(this);
+    addMouseListener(new MouseInputs(this));
   }
   public void makeBoard() {
     Piece[][] board = new Piece[8][8];
