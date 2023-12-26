@@ -9,12 +9,14 @@ public class Piece {
   public String type;
   public int value;
   Point pos;
+  public Board boardObj;
 
-  public Piece(String color, String type, int value, Point pos) {
+  public Piece(String color, String type, int value, Point pos,Board boardObj) {
     this.color = color;
      this.type = type;
      this.value = value;
      this.pos = pos;
+     this.boardObj = boardObj;
   }
   public boolean checkMoves(Point newpos) {
   	for(int i = 0; i <  posMoves.size(); i++) {
@@ -54,8 +56,8 @@ class Pawn extends Piece {
   //moves forward 1 square
 	public int orientation = 1;
 	public boolean firstMove = true;
-	public Pawn(String color, String type, int value, Point pos) {
-		super(color, type, value, pos);
+	public Pawn(String color, String type, int value, Point pos, Board boardObj) {
+		super(color, type, value, pos, boardObj);
 		if (this.color == "black") {
 			orientation  = -1;
 		}
@@ -82,7 +84,7 @@ public void findMoves() {
 	  if (capturedPiece.color == this.color) {
 	      return false;
 	   }
-	  if (Math.abs(capturedPiece.pos.x - this.pos.x) == 1 && this.pos.y == capturedPiece.pos.y) {
+	  if (Math.abs(capturedPiece.pos.x - this.pos.x) == 1 && (this.pos.y + orientation) == capturedPiece.pos.y) {
 		  return true;
 	  }
 	  return false;
@@ -90,45 +92,53 @@ public void findMoves() {
 }
 
 class Rook extends Piece {
-  // moves forward, backwards, right and left
-  public Rook(String color, String type,int value, Point pos) {
-    super(color, type, value, pos);
-    updatePoint(this.pos);
-  }
+	// moves forward, backwards, right and left
+	public Rook(String color, String type,int value, Point pos,Board boardObj) {
+		super(color, type, value, pos, boardObj);
+		updatePoint(this.pos);
+	}
 	public void updatePoint(Point newpos) {
 		this.pos = newpos;
 		this.findMoves();
 	}
 	
 	
-	  public void findMoves() {
-			posMoves.clear();
-			// Finding Forward(White) or Backward(Black) Moves 
-			for (int i = 0;  i < (8-pos.y) ; i ++) { 
-				posMoves.add(new Point(pos.x,pos.y + i));
-			}
-			// Finding Right(White) or Left(Black) Moves 
-			for (int i = 0;  i < (8-pos.x) ; i ++) { 
-				posMoves.add(new Point(pos.x + i,pos.y));
-			}
-			// Finding Backward(White) or Forward(Black) Moves 
-			for (int i = 0;  i < pos.y ; i ++) { 
-				posMoves.add(new Point(pos.x,pos.y - i));
-			}
-			// Finding Left(White) or Right(Black) Moves 
-			for (int i = 0;  i < pos.x ; i ++) { 
-				posMoves.add(new Point(pos.x - i,pos.y));
-			}
+	public void findMoves() {
+		posMoves.clear();
+		Piece[][] board = this.boardObj.getBoard(); 
+		// Finding Forward(White) or Backward(Black) Moves 
+		for (int i = 0;  i < (8-pos.y) ; i ++) {
 			
+			if (board[pos.x][pos.y + i] != null && board[pos.x][pos.y + i].color == this.color) { //Checks if a piece is blocking
+					break;
+			}
+			posMoves.add(new Point(pos.x,pos.y + i));
 		}
+			// Finding Right(White) or Left(Black) Moves 
+		for (int i = 0;  i < (8-pos.x) ; i ++) { 
+			if (board[pos.x + i ][pos.y] != null && board[pos.x + i][pos.y].color == this.color) { //Checks if a piece is blocking
+				break;
+			}
+			posMoves.add(new Point(pos.x + i,pos.y));
+		}
+		// Finding Backward(White) or Forward(Black) Moves 
+		for (int i = 0;  i < pos.y ; i ++) { 
+			posMoves.add(new Point(pos.x,pos.y - i));
+		}
+		// Finding Left(White) or Right(Black) Moves 
+		for (int i = 0;  i < pos.x ; i ++) { 
+			posMoves.add(new Point(pos.x - i,pos.y));
+		}
+			
+	}
 }
 
 class Knight extends Piece {
   // moves in a L shape
   public int up  = 3;
   public int over = 1;
-  public Knight(String color, String type, int value, Point pos) {
-    super(color, type, value, pos);
+  public Knight(String color, String type, int value, Point pos, Board boardObj) {
+    super(color, type, value, pos, boardObj);
   }
   public BufferedImage getImage() {
     BufferedImage image = imgHndle.setup("/chesspackage/assets/" + this.color.substring(0, 1)  + "N.png");
@@ -141,8 +151,8 @@ class Knight extends Piece {
 
 class Bishop extends Piece {
   // moves down diagonal lines
-  public Bishop(String color, String type, int value, Point pos) {
-    super(color, type, value, pos);
+  public Bishop(String color, String type, int value, Point pos, Board boardObj) {
+    super(color, type, value, pos, boardObj);
     updatePoint(this.pos);
   }
   
@@ -167,24 +177,24 @@ class Bishop extends Piece {
 			posMoves.add(new Point(pos.x-i,pos.y - i));
 		}
 		// Finding Left(White) or Right(Black) Moves 
-		for (int i = 0;  i < pos.x ; i ++) { 
+		for (int i = 0;  i < pos.x ; i ++) {
 			posMoves.add(new Point(pos.x - i,pos.y-i));
 		}
 		
 	}
 }
 
-class Queen extends Piece {
+class Queen extends Piece{
   // moves in both directions of bishops and rooks
-  public Queen(String color, String type,int value, Point pos) {
-    super(color, type, value, pos);
+  public Queen(String color, String type,int value, Point pos,Board boardObj) {
+    super(color, type, value, pos,boardObj);
   }
 }
 
 class King extends Piece {
   // moves one square in each direction
-  public King(String color, String type, int value, Point pos) {
-    super(color, type, value, pos);
+  public King(String color, String type, int value, Point pos, Board boardObj) {
+    super(color, type, value, pos, boardObj);
   }
   public void updatePoint(Point newpos) {
 	  this.pos = newpos;

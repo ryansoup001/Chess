@@ -34,7 +34,7 @@ class PieceManager {
 	  int x = (pos.x/board.TILESIZE);
 	  int y = (pos.y/board.TILESIZE);
 	  Piece posclicked = board.getBoard()[x][y];
-	  //System.out.print(posclicked + "at Point " + posclicked.pos);
+	  System.out.print("You CLicked at Point" + pos);
 	  if (posclicked != null) {  // either selecting a piece capturing piece or selecting a different piece
 		  if (posclicked.color == turn) {
 			  pieceSelected = posclicked;
@@ -63,6 +63,7 @@ class PieceManager {
     	board[piece.pos.x][piece.pos.y] = null;
     	board[newpos.x][newpos.y] = piece;
     	this.changeMove();
+    	this.board.repaint();
     } else {
     	System.out.println("Moved piece to Point:" + newpos + "  possible moves:" + piece.posMoves);
     }
