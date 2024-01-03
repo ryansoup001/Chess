@@ -16,6 +16,8 @@ public abstract class Piece {
   public int value;
   public Point pos;
   public Board boardObj;
+  
+  
   public Piece(String color, String type, int value, Point pos, Board boardObj){
 	  this.color = color;
 	  this.type = type;
@@ -28,6 +30,8 @@ public abstract class Piece {
 		  this.boardObj.pieceManager.black.add(this);
 	  }
   }
+  
+  
   public boolean checkMoves(Point newpos) {
   	for(int i = 0; i < posMoves.size(); i++) {
   		if (posMoves.get(i).equals(newpos)) {
@@ -36,6 +40,8 @@ public abstract class Piece {
   	}
   	return false;
   }
+  
+  
 	public void updatePoint(Point newpos) {
 		this.pos = newpos;
 	}
@@ -57,9 +63,13 @@ public abstract class Piece {
     BufferedImage image = imgHndle.setup("/chesspackage/assets/" + this.color.substring(0, 1)  + this.type.substring(0,1) + ".png");
     return image;
   }
+  
+  
   public String toString() {
     return this.type;
   }
+  
+  
   public void showposMoves(Graphics g) {
 	  for (int i = 0; i < posMoves.size(); i++)  {
 		  g.fillOval(((posMoves.get(i).x) * boardObj.TILESIZE) + boardObj.TILESIZE/2 , ((posMoves.get(i).y ) * boardObj.TILESIZE) + boardObj.TILESIZE/2,rad,rad);

@@ -34,7 +34,16 @@ public class MoveManager {
 			posCopy = piece.pos.getLocation();
 			posCopy.translate(translation.x,translation.y);
 			posMoves.add(posCopy);
-			
+		}
+		for (int i = 0; i < posMoves.size(); i++) {
+			if (posMoves.get(i).x < 0 || posMoves.get(i).x > 8 ) {
+				posMoves.remove(i);
+				i--;
+			}
+			if (posMoves.get(i).y < 0 || posMoves.get(i).y > 8 ) {
+				posMoves.remove(i);
+				i--;
+			}
 		}
 	}
 	public void straight(Piece piece,Board boardObj) {

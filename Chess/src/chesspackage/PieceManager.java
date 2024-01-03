@@ -83,9 +83,7 @@ public class PieceManager {
     if (board[newpos.x][newpos.y] != null) {    //Checks if piece is in the square we're trying to move onto is occupied	
       Piece capturedPiece = board[newpos.x][newpos.y];
       System.out.println("Attempting To Capture Piece"); 
-      System.out.println(piece.capturePiece(capturedPiece)); 
-      System.out.println(piece.posMoves); 
-      if (piece.capturePiece(capturedPiece)){  // add Piece to captured array and it in a dictionary
+      if (piece.capturePiece(capturedPiece) &&  !checkHandler.checkForChecks(this.boardObj,checkHandler.makeTheoryBoard(this, board, piece, newpos))){  // add Piece to captured array and it in a dictionary
 //    	  if (capturedPiece.color == "black") {
 //    		  //capturedPieces[0].put(capturedPiece.type,(capturedPieces[0].get(capturedPiece.type)));
 //    	  }
@@ -94,6 +92,10 @@ public class PieceManager {
     	  board[piece.pos.x][piece.pos.y] = null;
     	  piece.updatePoint(newpos);
     	  this.changeMove();
+    	  if(checkHandler.checkForChecks(boardObj,board)) {
+    		  System.out.println("Check");
+          }
+        	
       }
     } else if (piece.checkMoves(newpos) && !checkHandler.checkForChecks(this.boardObj,checkHandler.makeTheoryBoard(this, board, piece, newpos))) { // Check if piece can legally move this direction
     	System.out.println("Move is legal . . Moving Piece");
@@ -102,6 +104,9 @@ public class PieceManager {
     	piece.updatePoint(newpos);
     	updateAllPieces(this.boardObj.getBoard());
     	this.changeMove();
+    	if(checkHandler.checkForChecks(boardObj,board)) {
+    		System.out.println("Check");
+    	}
     	
     } else {
     	System.out.println("Moved piece to Point:" + newpos + "  possible moves:" + piece.posMoves);
