@@ -2,7 +2,7 @@ package chesspackage;
 
 import javax.swing.JFrame;
 
-public class Display{
+public class Display {
   public JFrame jframe;
   	public Display(Board board) {
     jframe = new JFrame();

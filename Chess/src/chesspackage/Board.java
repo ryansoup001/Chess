@@ -5,21 +5,27 @@ import java.util.Arrays;
 
 import javax.swing.JPanel;
 
+import Piecespackage.*;
+
+
 public class Board extends JPanel {
   BufferedImage chessBoardImg;
   Display display;
-  Piece[][] board;
+  public Piece[][] board;
   public final int PIECESIZE  = 35;
   public final int TILESIZE = 64;
   String[] rows = {"a", "b", "c", "d", "e", "f", "g", "h"};
-  PieceManager pieceManager;
+  public PieceManager pieceManager;
+  public Piece pieceSelected;
   public Board() {
+	pieceManager = new PieceManager(this);
+
     setPreferredSize(new Dimension(900,900));
-    this.makeBoard();
-    this.setupBoard();
+	display = new Display(this);
+	this.makeBoard();
+	this.setupBoard();
+	this.pieceManager.updateAllPieces(this.getBoard());
     chessBoardImg = this.getBoardImg();
-    display = new Display(this);
-    pieceManager = new PieceManager(this);
     addMouseListener(new MouseInputs(this));
   }
   public void makeBoard() {
@@ -66,11 +72,11 @@ public class Board extends JPanel {
 
     //Placing Queens
     board[4][0] = new Queen("white","Queen",9,new Point(4,0),this);
-    board[3][7] = new Queen("black","Queen",9,new Point(3,7),this);
+    board[4][7] = new Queen("black","Queen",9,new Point(4,7),this);
 
     //Placing Kings
     board[3][0] = new King("white","King",10,new Point(3,0), this);
-    board[4][7] = new King("black","King",10,new Point(4,7),this);
+    board[3][7] = new King("black","King",10,new Point(3,7),this);
   }
   public void showBoard(Graphics g) {
 //    System.out.print("\033[H\033[2J");
@@ -94,7 +100,9 @@ public class Board extends JPanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     this.showBoard(g);
-    
+    if (pieceSelected != null) {
+    	pieceSelected.showposMoves(g);
+    }
     g.dispose();
   }
 }
