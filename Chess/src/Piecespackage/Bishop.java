@@ -17,8 +17,8 @@ public class Bishop extends Piece {
 
 
 	@Override
-	public void updateMoves() {
+	public void updateMoves(Piece[][] board) {
 		posMoves.clear();
-		posMoves.addAll(moveM.moveset("d", this, boardObj));
+		posMoves.addAll(moveM.moveset("d", this, board));
 	}
 }

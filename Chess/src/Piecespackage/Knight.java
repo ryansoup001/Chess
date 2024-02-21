@@ -18,9 +18,9 @@ public class Knight extends Piece {
 	   	return image;
 	}
 	@Override
-	public void updateMoves() {
+	public void updateMoves(Piece[][] board) {
 		posMoves.clear();
-		posMoves.addAll(moveM.moveset("k", this, boardObj));
+		posMoves.addAll(moveM.moveset("k", this, board));
 		
 	}
 	  }

@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import chesspackage.Board;
 import chesspackage.ImageHandler;
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
   public boolean showMoves = true;
-  final int rad = 10;
+  final int RAD = 10;
   public ImageHandler imgHndle = new ImageHandler();
   public String color;
   public ArrayList<Point> posMoves = new ArrayList<Point>();
@@ -30,8 +30,25 @@ public abstract class Piece {
 		  this.boardObj.pieceManager.black.add(this);
 	  }
   }
-  
-  
+  @Override
+public Object clone() {
+	  try {
+		  Object clone = super.clone();
+		  Piece piece = (Piece)(clone);
+		  piece.boardObj = boardObj;
+		  piece.color = color;
+		  piece.type = type;
+		  piece.value = value;
+		  piece.pos = pos;
+		return piece;
+	} catch (CloneNotSupportedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return null;
+	  
+	  
+  }
   public boolean checkMoves(Point newpos) {
   	for(int i = 0; i < posMoves.size(); i++) {
   		if (posMoves.get(i).equals(newpos)) {
@@ -45,8 +62,7 @@ public abstract class Piece {
 	public void updatePoint(Point newpos) {
 		this.pos = newpos;
 	}
-	public abstract void updateMoves();
-	
+	public abstract void updateMoves(Piece[][] board);
   public boolean capturePiece( Piece capturedPiece) {
     if (capturedPiece.color == color) {
     	System.out.println("Cannot capture your own piece");
@@ -72,7 +88,7 @@ public abstract class Piece {
   
   public void showposMoves(Graphics g) {
 	  for (int i = 0; i < posMoves.size(); i++)  {
-		  g.fillOval(((posMoves.get(i).x) * boardObj.TILESIZE) + boardObj.TILESIZE/2 , ((posMoves.get(i).y ) * boardObj.TILESIZE) + boardObj.TILESIZE/2,rad,rad);
+		  g.fillOval(((posMoves.get(i).x) * boardObj.TILESIZE) + boardObj.TILESIZE/2 , ((posMoves.get(i).y ) * boardObj.TILESIZE) + boardObj.TILESIZE/2,RAD,RAD);
 	  }
   }
   

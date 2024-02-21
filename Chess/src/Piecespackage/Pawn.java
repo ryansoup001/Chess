@@ -29,7 +29,7 @@ public class Pawn extends Piece {
 		return false;
 	}
 	@Override
-	public void updateMoves() {
+	public void updateMoves(Piece[][] board) {
 		int rank = pos.y;
 		posMoves.clear();
 		if(color == "white") {

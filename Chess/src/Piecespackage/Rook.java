@@ -13,8 +13,8 @@ public class Rook extends Piece {
 	}
 	
 	@Override
-	public void updateMoves() {
+	public void updateMoves(Piece[][] board) {
 		posMoves.clear();
-		posMoves.addAll(moveM.moveset("s", this, boardObj));
+		posMoves.addAll(moveM.moveset("s", this, board));
 	}
 }

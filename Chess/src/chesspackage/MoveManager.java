@@ -3,28 +3,32 @@ package chesspackage;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import chessRules.Checks;
 import Piecespackage.Piece;
-
+import chesspackage.PieceManager;
+/* Modify this program so that it Doesnt include moves that are checks or illegal moves(pins, skewers, etc)
+ * 
+ */
 public class MoveManager {
+	Checks cHandler = new Checks();
 	ArrayList<Point> posMoves = new ArrayList<Point>();
-	public ArrayList<Point> moveset(String type,Piece piece,Board boardObj) {
+	public ArrayList<Point> moveset(String type,Piece piece,Piece[][] board) {
 		posMoves.clear();
 		for (int i = 0; i < type.length();i++) {
 			switch(type.charAt(i)) {
 				case 's':
-					this.straight(piece,boardObj);
+					this.straight(piece,board);
 					break;
 				case 'd':
-					this.diagonal(piece, boardObj);
+					this.diagonal(piece, board);
 					break;
 				case 'k':		//Knight Movement
-					this.knight(piece,boardObj);					
+					this.knight(piece,board);					
 			}
 		}
 		return posMoves;
 	}
-	public void knight(Piece piece, Board boardObj) {
+	public void knight(Piece piece, Piece[][] board) {
 		Point posCopy = piece.pos.getLocation();
 		final int up = 2;
 		final int over = 1;
@@ -36,46 +40,51 @@ public class MoveManager {
 			posMoves.add(posCopy);
 		}
 		for (int i = 0; i < posMoves.size(); i++) {
-			if (posMoves.get(i).x < 0 || posMoves.get(i).x > 8 ) {
+			if (posMoves.get(i).x < 0 || posMoves.get(i).x > 7 ) {
 				posMoves.remove(i);
 				i--;
 			}
-			if (posMoves.get(i).y < 0 || posMoves.get(i).y > 8 ) {
+			if (posMoves.get(i).y < 0 || posMoves.get(i).y > 7 ) {
 				posMoves.remove(i);
 				i--;
 			}
 		}
 	}
-	public void straight(Piece piece,Board boardObj) {
+	
+	
+	public void straight(Piece piece,Piece[][] board) {
 		Point pos = piece.pos;
-		Piece[][] board = boardObj.getBoard(); 
 		// Finding Forward(White) or Backward(Black) Moves 
-		for (int i = 1;  i < (board[i].length-pos.y); i ++) {
-			
-			if (board[pos.x][pos.y + i] != null ) { //Checks if a piece is blocking
-				if (board[pos.x][pos.y + i].color != piece.color) {
-					posMoves.add(new Point(pos.x,pos.y + i));
-					break;
-				} else {
-					break;
+		for (int i = 1;  i < (board.length) - pos.y; i ++) {
+			if (!cHandler.checkForChecks(cHandler.makeTheoryBoard(board, piece, new Point(pos.x,pos.y + i),piece.boardObj.pieceManager), piece.color)) {
+				if (board[pos.x][pos.y + i] != null ) {
+				//Checks if a piece is blocking
+					if (board[pos.x][pos.y + i].color != piece.color) {
+						posMoves.add(new Point(pos.x,pos.y + i));
+						break;
+					} else {
+						break;
+					}
 				}
+				posMoves.add(new Point(pos.x,pos.y + i));
 			}
-			posMoves.add(new Point(pos.x,pos.y + i));
 		}
 			// Finding Left(White) or right(Black) Moves 
-		for (int i = 1;  i < (board.length - pos.x); i ++) { 
-			if (board[pos.x + i][pos.y] != null) { //Checks if a piece is blocking
-				if (board[pos.x + i][pos.y].color != piece.color) {
-					posMoves.add(new Point(pos.x + i,pos.y));
-					break;
-				} else {
-					break;
+		for (int i = 1;  i < ((board.length) - pos.x); i ++) { 
+			if (!cHandler.checkForChecks(cHandler.makeTheoryBoard(board, piece, new Point(pos.x + i,pos.y),piece.boardObj.pieceManager), piece.color)) {
+				if (board[pos.x + i][pos.y] != null) { //Checks if a piece is blocking
+					if (board[pos.x + i][pos.y].color != piece.color) {
+						posMoves.add(new Point(pos.x + i,pos.y));
+						break;
+					} else {
+						break;
+					}
 				}
+				posMoves.add(new Point(pos.x + i,pos.y));
 			}
-			posMoves.add(new Point(pos.x + i,pos.y));
 		}
 		// Finding Backward(White) or Forward(Black) Moves 
-		for (int i = 1;  i < pos.y ; i ++) { 
+		for (int i = 1;  i <= (pos.y) ; i ++) { 
 			if (board[pos.x][pos.y - i] != null ) { //Checks if a piece is blocking
 				if (board[pos.x][pos.y - i].color != piece.color) {
 					posMoves.add(new Point(pos.x,pos.y - i));
@@ -87,7 +96,7 @@ public class MoveManager {
 			posMoves.add(new Point(pos.x,pos.y - i));
 		}
 		// Finding Left(White) or Right(Black) Moves 
-		for (int i = 1;  i < pos.x ; i ++) { 
+		for (int i = 1;  i <= pos.x  ; i ++) { 
 			if (board[pos.x - i][pos.y] != null ) { //Checks if a piece is blocking
 				if (board[pos.x - i][pos.y].color != piece.color) {
 					posMoves.add(new Point(pos.x - i,pos.y));
@@ -101,9 +110,8 @@ public class MoveManager {
 	}
 	
 	
-	public void diagonal(Piece piece,Board boardObj) {
-		Point pos = piece.pos; 
-		Piece[][] board = boardObj.getBoard(); 
+	public void diagonal(Piece piece,Piece[][] board) {
+		Point pos = piece.pos;  
 //		for (int i = 0; i < board.length; i ++) {
 //			// Finding Forward Right(White) or Backward Left(Black) Moves 
 //			posMoves.add(new Point(pos.x + i,pos.y + i));
@@ -115,19 +123,19 @@ public class MoveManager {
 //			posMoves.add(new Point(pos.x - i, pos.y + i));
 //		}
 		//Forwards Left (White)
-for (int i = 1;  i < Math.min(pos.x + 1,board[i].length-pos.y); i ++) {
-	if (board[pos.x - i][pos.y + i] != null ) { //Checks if a piece is blocking
-		if (board[pos.x - i][pos.y + i].color != piece.color) {
-			posMoves.add(new Point(pos.x - i,pos.y + i));
-			break;
-		} else {
-			break;
-		}
-	}
+		for (int i = 1;  i <= Math.min(pos.x,board[i].length -1 - pos.y); i ++) {
+			if (board[pos.x - i][pos.y + i] != null ) { //Checks if a piece is blocking
+				if (board[pos.x - i][pos.y + i].color != piece.color) {
+					posMoves.add(new Point(pos.x - i,pos.y + i));
+					break;
+				} else {
+					break;
+				}
+			}
 			posMoves.add(new Point(pos.x - i,pos.y + i));
 		}
 			// Finding Left(White) or right(Black) Moves 
-		for (int i = 1;  i < Math.min(board[pos.x].length - pos.y,board.length - pos.x); i ++) { 
+		for (int i = 1;  i <= Math.min(board[pos.x].length - 1 - pos.y,board.length - 1 - pos.x); i ++) { 
 			if (board[pos.x + i][pos.y + i] != null ) { //Checks if a piece is blocking
 				if (board[pos.x + i][pos.y + i].color != piece.color) {
 					posMoves.add(new Point(pos.x + i,pos.y + i));
@@ -139,7 +147,7 @@ for (int i = 1;  i < Math.min(pos.x + 1,board[i].length-pos.y); i ++) {
 			posMoves.add(new Point(pos.x + i,pos.y + i));
 		}
 		// Finding Backward(White) or Forward(Black) Moves 
-		for (int i = 1;  i < Math.min(pos.y + 1, board.length - pos.x) ; i ++) { 
+		for (int i = 1;  i <= Math.min(pos.y, board.length - 1 - pos.x) ; i ++) { 
 			if (board[pos.x + i][pos.y - i] != null ) { //Checks if a piece is blocking
 				if (board[pos.x + i][pos.y - i].color != piece.color) {
 					posMoves.add(new Point(pos.x + i,pos.y - i));
@@ -151,7 +159,7 @@ for (int i = 1;  i < Math.min(pos.x + 1,board[i].length-pos.y); i ++) {
 			posMoves.add(new Point(pos.x + i,pos.y - i));
 		}
 		// Finding Left(White) or Right(Black) Moves 
-		for (int i = 1;  i < Math.min(pos.x + 1,pos.y + 1) ; i ++) { 
+		for (int i = 1;  i <= Math.min(pos.x,pos.y) ; i ++) { 
 			if (board[pos.x - i][pos.y - i] != null ) { //Checks if a piece is blocking
 				if (board[pos.x - i][pos.y - i].color != piece.color) {
 					posMoves.add(new Point(pos.x - i,pos.y - i));

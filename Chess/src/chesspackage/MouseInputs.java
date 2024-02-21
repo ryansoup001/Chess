@@ -17,7 +17,11 @@ public class MouseInputs implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		display.pieceManager.clicks(new Point(x,y));
+		if (display.gameState == "playing") {
+			display.pieceManager.clicks(new Point(x,y));
+		} else if (display.gameState == "running") {
+			
+		}
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

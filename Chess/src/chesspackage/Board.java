@@ -9,6 +9,7 @@ import Piecespackage.*;
 
 
 public class Board extends JPanel {
+  public String gameState = "playing";
   BufferedImage chessBoardImg;
   Display display;
   public Piece[][] board;
@@ -16,11 +17,12 @@ public class Board extends JPanel {
   public final int TILESIZE = 64;
   String[] rows = {"a", "b", "c", "d", "e", "f", "g", "h"};
   public PieceManager pieceManager;
+  public final int WIDTH = 900, HEIGHT = 900;
   public Piece pieceSelected;
   public Board() {
 	pieceManager = new PieceManager(this);
 
-    setPreferredSize(new Dimension(900,900));
+    setPreferredSize(new Dimension(WIDTH,HEIGHT));
 	display = new Display(this);
 	this.makeBoard();
 	this.setupBoard();
@@ -46,11 +48,11 @@ public class Board extends JPanel {
     return boardImg;
   }
   public void setupBoard() {
-    //Placing Pawns
-    for (int i  = 0; i < 8; i++) {
-      board[i][1] = new Pawn("white","Pawn",1,new Point(i,1),this);
-      board[i][6] = new Pawn("black","Pawn",1,new Point(i,6),this);
-    }
+//    //Placing Pawns
+//    for (int i  = 0; i < 8; i++) {
+//      board[i][1] = new Pawn("white","Pawn",1,new Point(i,1),this);
+//      board[i][6] = new Pawn("black","Pawn",1,new Point(i,6),this);
+//    }
     
     //Placing Rooks
     board[0][0] = new Rook("white","Rook",5,new Point(0,0),this);
@@ -59,16 +61,16 @@ public class Board extends JPanel {
     board[7][7] = new Rook("black","Rook",5,new Point(7,7),this);
     
     //Placing Knights
-    board[1][0] = new Knight("white","Knight",5,new Point(1,0),this);
-    board[6][0] = new Knight("white","Knight",5,new Point(6,0),this);
-    board[1][7] = new Knight("black","Knight",5,new Point(1,7),this);
-    board[6][7] = new Knight("black","Knight",5,new Point(6,7),this);
+//    board[1][0] = new Knight("white","Knight",5,new Point(1,0),this);
+//    board[6][0] = new Knight("white","Knight",5,new Point(6,0),this);
+//    board[1][7] = new Knight("black","Knight",5,new Point(1,7),this);
+//    board[6][7] = new Knight("black","Knight",5,new Point(6,7),this);
 
     //Placing Bishops
-    board[2][0] = new Bishop("white","Bishop",5,new Point(2,0),this);
-    board[5][0] = new Bishop("white","Bishop",5,new Point(5,0),this);
-    board[2][7] = new Bishop("black","Bishop",5,new Point(2,7),this);
-    board[5][7] = new Bishop("black","Bishop",5,new Point(5,7),this);
+//    board[2][0] = new Bishop("white","Bishop",5,new Point(2,0),this);
+//    board[5][0] = new Bishop("white","Bishop",5,new Point(5,0),this);
+//    board[2][7] = new Bishop("black","Bishop",5,new Point(2,7),this);
+//    board[5][7] = new Bishop("black","Bishop",5,new Point(5,7),this);
 
     //Placing Queens
     board[4][0] = new Queen("white","Queen",9,new Point(4,0),this);
@@ -84,19 +86,37 @@ public class Board extends JPanel {
 //    for (Piece[] row : this.board){
 //     System.out.println(Arrays.toString(row));
 //    }
-    g.drawImage(chessBoardImg,0,0,TILESIZE * 8,TILESIZE * 8,null);
-    for (int r = 0; r < this.board.length; r++) {
-      for (int c  = 0; c < this.board[r].length;c++) {
-        if (this.board[r][c] != null) {
-          g.drawImage(this.board[r][c].getImage(),this.board[r][c].pos.x * TILESIZE,this.board[r][c].pos.y * TILESIZE,PIECESIZE,PIECESIZE,null);
-        }
-      }
-    }
+   switch(gameState) {
+   		case "playing":
+		   g.drawImage(chessBoardImg,0,0,TILESIZE * 8,TILESIZE * 8,null);
+		    for (int r = 0; r < this.board.length; r++) {
+		      for (int c  = 0; c < this.board[r].length;c++) {
+		        if (this.board[r][c] != null) {
+		          g.drawImage(this.board[r][c].getImage(),this.board[r][c].pos.x * TILESIZE,this.board[r][c].pos.y * TILESIZE,PIECESIZE,PIECESIZE,null);
+		        }
+		      }
+		    }
+		    break;
+   		case "running":
+   			g.drawString("START MENU",WIDTH/2, HEIGHT/2);
+   			break;
+   		case "Game Over":
+   			g.drawString(gameState, WIDTH/2, HEIGHT/2);
+
+   }
   }
   public void updateBoard(Piece[][] newBoard) {   // Dont think i need this but keeping it just in case
    this.board = newBoard;
   }
-  
+  public void changeGameState(int state) {
+	  if (state == 0) {
+		  gameState = "running";
+	  } else if (state == 1) {
+		  gameState = "playing";
+	  } else if (state == 2) {
+		  gameState = "Game Over";
+	  }
+  }
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     this.showBoard(g);
