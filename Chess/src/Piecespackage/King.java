@@ -26,8 +26,21 @@ public class King extends Piece {
 					 * if diagonally away from king it is root of 2 (because of Pythagereom thereom)
 					 */
 					if (board[r][c] == null) {
-						posMoves.add(new Point(r,c)); 
+						posMoves.add(new Point(r,c));
+					} else if (board[r][c].color != this.color) {
+						posMoves.add(new Point(r,c));
 					}
+//					} else if (board[r][c].color == this.color) {
+//						board[r][c].protectedByPiece = true;
+//					} else if (board[r][c].protectedByPiece) { 
+//						/*FIXME
+//						 * THE PROTECTEDBYPIECE IS A TEMPORARY FIX FOR A LOGIC ERROR IN CHECKS.MAKETHEORYBOARD() --METHOD
+//						 * USE
+//						 * board[r][c].color != this.color && !board[r][c].protectedByPiece
+//						 * AS BOOLEAN STATEMENT & DELETE THE FIRST ELSE IF
+//						 */ 
+//						posMoves.add(new Point(r,c));
+//					}
 				}
 			}
 		}

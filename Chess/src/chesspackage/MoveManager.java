@@ -55,41 +55,51 @@ public class MoveManager {
 	public void straight(Piece piece,Piece[][] board) {
 		Point pos = piece.pos;
 		// Finding Forward(White) or Backward(Black) Moves 
-		for (int i = 1;  i < (board.length) - pos.y; i ++) {
-			if (!cHandler.checkForChecks(cHandler.makeTheoryBoard(board, piece, new Point(pos.x,pos.y + i),piece.boardObj.pieceManager), piece.color)) {
+		for (int i = 1;  i <= (board.length - 1) - pos.y; i ++) {
+			//System.out.print(pos.y + " + " + i);
+			//if (!cHandler.checkForChecks(cHandler.makeTheoryBoard(board, piece, new Point(pos.x,pos.y + i),piece.boardObj.pieceManager), piece.color)) {
 				if (board[pos.x][pos.y + i] != null ) {
 				//Checks if a piece is blocking
 					if (board[pos.x][pos.y + i].color != piece.color) {
 						posMoves.add(new Point(pos.x,pos.y + i));
+						//System.out.println("Added " + new Point(pos.x,pos.y + i));
 						break;
 					} else {
+						board[pos.x][pos.y + i].protectedByPiece = true;
+						//=
+				
+						//System.out.print(board[pos.x][pos.y + i] + " is protected by " + piece);
 						break;
 					}
+					
 				}
 				posMoves.add(new Point(pos.x,pos.y + i));
-			}
+				//System.out.println("Added " + new Point(pos.x,pos.y + i));
+			//}
 		}
 			// Finding Left(White) or right(Black) Moves 
-		for (int i = 1;  i < ((board.length) - pos.x); i ++) { 
-			if (!cHandler.checkForChecks(cHandler.makeTheoryBoard(board, piece, new Point(pos.x + i,pos.y),piece.boardObj.pieceManager), piece.color)) {
+		for (int i = 1;  i <= ((board.length - 1) - pos.x); i ++) { 
 				if (board[pos.x + i][pos.y] != null) { //Checks if a piece is blocking
 					if (board[pos.x + i][pos.y].color != piece.color) {
 						posMoves.add(new Point(pos.x + i,pos.y));
 						break;
 					} else {
+						board[pos.x + i][pos.y].protectedByPiece = true;
+						//System.out.print(board[pos.x + i][pos.y] + " is protected by " + piece);
 						break;
 					}
 				}
 				posMoves.add(new Point(pos.x + i,pos.y));
-			}
 		}
 		// Finding Backward(White) or Forward(Black) Moves 
-		for (int i = 1;  i <= (pos.y) ; i ++) { 
+		for (int i = 1;  i <=  (pos.y) ; i ++) { 
 			if (board[pos.x][pos.y - i] != null ) { //Checks if a piece is blocking
 				if (board[pos.x][pos.y - i].color != piece.color) {
 					posMoves.add(new Point(pos.x,pos.y - i));
 					break;
 				} else {
+					board[pos.x][pos.y - i].protectedByPiece = true;
+					//System.out.print(board[pos.x][pos.y - i] + " is protected by " + piece);
 					break;
 				}
 		}
@@ -102,6 +112,8 @@ public class MoveManager {
 					posMoves.add(new Point(pos.x - i,pos.y));
 					break;
 				} else {
+					board[pos.x - i][pos.y].protectedByPiece = true;
+					//System.out.print(board[pos.x - i][pos.y] + " is protected by " + piece);
 					break;
 				}
 			}
@@ -122,13 +134,16 @@ public class MoveManager {
 //			// Finding Backwards Right(White) or Forward Left(Black) Moves 
 //			posMoves.add(new Point(pos.x - i, pos.y + i));
 //		}
-		//Forwards Left (White)
-		for (int i = 1;  i <= Math.min(pos.x,board[i].length -1 - pos.y); i ++) {
+		//Forwards Right (White) or Backwards Left
+		for (int i = 1;  i <= Math.min(pos.x,board[i].length - 1 - pos.y); i ++) {
+			
 			if (board[pos.x - i][pos.y + i] != null ) { //Checks if a piece is blocking
 				if (board[pos.x - i][pos.y + i].color != piece.color) {
 					posMoves.add(new Point(pos.x - i,pos.y + i));
 					break;
 				} else {
+					board[pos.x - i][pos.y + i].protectedByPiece = true;
+					//System.out.print(board[pos.x - i][pos.y + i] + " is protected by " + piece);
 					break;
 				}
 			}
@@ -141,6 +156,8 @@ public class MoveManager {
 					posMoves.add(new Point(pos.x + i,pos.y + i));
 					break;
 				} else {
+					board[pos.x + i][pos.y + i].protectedByPiece = true;
+					//System.out.print(board[pos.x + i][pos.y + i] + " is protected by " + piece);
 					break;
 				}
 			}
@@ -153,6 +170,8 @@ public class MoveManager {
 					posMoves.add(new Point(pos.x + i,pos.y - i));
 					break;
 				} else {
+					board[pos.x + i][pos.y - i].protectedByPiece = true;
+					//System.out.print(board[pos.x + i][pos.y - i] + " is protected by " + piece);
 					break;
 				}
 			}
@@ -165,6 +184,8 @@ public class MoveManager {
 					posMoves.add(new Point(pos.x - i,pos.y - i));
 					break;
 				} else {
+					board[pos.x - i][pos.y - i].protectedByPiece = true;
+					//System.out.print(board[pos.x - i][pos.y - i] + " is protected by " + piece);
 					break;
 				}
 			}

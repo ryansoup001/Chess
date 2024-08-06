@@ -12,10 +12,11 @@ public class PieceManager {
   public Piece pieceSelected;
   public ArrayList<String> pastMoves = new ArrayList<String>();
   public String turn = "white";
+  public String oppositeTurn = "black";
   public Dictionary[] capturedPieces = new Dictionary[2];
   public ArrayList<Piece> black = new ArrayList<Piece>();
   public ArrayList<Piece> white = new ArrayList<Piece>();
-  Checks checkHandler; 
+  public Checks checkHandler; 
   
   public PieceManager(Board boardObj) {
 	checkHandler = new Checks();
@@ -31,6 +32,14 @@ public class PieceManager {
     printToMove();
   }
   public void updateAllPieces(Piece[][] board) {
+	  
+//	  for (int r = 0; r < board.length; r++ ) {
+//		  for (int c = 0; c < board[r].length; c++ ) {
+//			  if (board[r][c] != null) {
+//				  board[r][c].protectedByPiece = false;
+//			  }
+//		  }
+//	  }
 	  for (int r = 0; r < board.length; r++ ) {
 		  for (int c = 0; c < board[r].length; c++ ) {
 			  if (board[r][c] != null) {
@@ -45,8 +54,10 @@ public class PieceManager {
   // Handles Move
   public String changeMove() {
    if (turn == "white") {
+	   oppositeTurn = turn;
 	   return "black";
    } else {
+	   oppositeTurn = turn;
 	   return "white";
    }
   }
@@ -65,7 +76,7 @@ public class PieceManager {
 				  System.out.println(pieceSelected + " has been selected");
 				  this.boardObj.pieceSelected = pieceSelected; 
 			  } else if (pieceSelected != null ) {
-				  System.out.println("You requested to move " + pieceSelected + " to " + pointToString(new Point(x,y)));
+				  //System.out.println("You requested to move " + pieceSelected + " to " + pointToString(new Point(x,y)));
 				  this.movePiece(pieceSelected,posclicked.pos);
 				  this.boardObj.pieceSelected = null; 
 			  }
@@ -78,27 +89,34 @@ public class PieceManager {
   }
   // Handles Piece Moves
   public void movePiece(Piece piece , Point newpos ) {
-	 
     Piece[][] board = this.boardObj.getBoard();
+    Piece[][] futureBoard = checkHandler.makeTheoryBoard(board,piece,newpos,this);
     if (board[newpos.x][newpos.y] != null) {    //Checks if piece is in the square we're trying to move onto is occupied	
       Piece capturedPiece = board[newpos.x][newpos.y];
-      System.out.println("Attempting To Capture Piece"); 
-      if (piece.checkMoves(newpos)){  // add Piece to captured array and it in a dictionary
-//    	  if (capturedPiece.color == "black") {
-//    		  //capturedPieces[0].put(capturedPiece.type,(capturedPieces[0].get(capturedPiece.type)));
-//    	  }
-    	 
+    //  System.out.println(piece.checkMoves(newpos));
+      if (piece.checkMoves(newpos) && !checkHandler.checkForChecks(futureBoard ,turn)){ 
+    	  // add Piece to captured array and it in a dictionary
+    	  if (capturedPiece.color == "black") {
+    		  //capturedPieces[0].put(capturedPiece.type,(capturedPieces[0].get(capturedPiece.type)));
+    	  }
+    	  System.out.println("Captured Piece");
     	  board[newpos.x][newpos.y] = piece;
     	  board[piece.pos.x][piece.pos.y] = null;
     	  piece.updatePoint(newpos);
     	  updateAllPieces(board);
     	  turn = this.changeMove();
       	  printToMove();
-    	  if(checkHandler.checkForChecks(board, turn)) {
-    		  System.out.println("Check");
-          }
+      	if(checkHandler.checkForChecks(board,turn)) {
+    		String result = "Check";
+    		if(checkHandler.checkForMate(board,turn, this)) {
+    			result += "mate!";
+    			boardObj.changeGameState(2);
+    		}
+    		System.out.println(result);
+    	} 
+    	
       }
-    } else if (piece.checkMoves(newpos)) { // Check if piece can legally move this direction
+    } else if (piece.checkMoves(newpos) && !checkHandler.checkForChecks(futureBoard ,turn)) { // Check if piece can legally move this direction
     	System.out.println("Move is legal . . Moving Piece");
     	board[piece.pos.x][piece.pos.y] = null;
     	board[newpos.x][newpos.y] = piece;
@@ -109,14 +127,14 @@ public class PieceManager {
     	
     	
     	
-//    	if(checkHandler.checkForChecks(board,turn)) {
-//    		String result = "Check";
-//    		if(!checkHandler.checkForMate(this)) {
-//    			result += "Mate!";
-//    			boardObj.changeGameState(2);
-//    		}
-//    		System.out.println(result);
-//    	} 
+    	if(checkHandler.checkForChecks(board,turn)) {
+    		String result = "Check";
+    		if(checkHandler.checkForMate(board,turn,this)) {
+    			result += "mate!";
+    			boardObj.changeGameState(2);
+    		}
+    		System.out.println(result);
+    	} 
     	
     	
     } else {

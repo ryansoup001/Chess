@@ -16,9 +16,9 @@ public abstract class Piece implements Cloneable {
   public int value;
   public Point pos;
   public Board boardObj;
-  
-  
+  public boolean protectedByPiece; 
   public Piece(String color, String type, int value, Point pos, Board boardObj){
+	  this.protectedByPiece = false;
 	  this.color = color;
 	  this.type = type;
 	  this.value = value;
@@ -33,14 +33,10 @@ public abstract class Piece implements Cloneable {
   @Override
 public Object clone() {
 	  try {
-		  Object clone = super.clone();
-		  Piece piece = (Piece)(clone);
-		  piece.boardObj = boardObj;
-		  piece.color = color;
-		  piece.type = type;
-		  piece.value = value;
-		  piece.pos = pos;
-		return piece;
+		  Piece clone = (Piece)super.clone();
+		  clone.pos = new Point();
+		  clone.posMoves = new ArrayList<Point>();
+		return clone;
 	} catch (CloneNotSupportedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -54,13 +50,15 @@ public Object clone() {
   		if (posMoves.get(i).equals(newpos)) {
   			return true;
   		}
+  		//System.out.print("(" + posMoves.get(i).x + "," + posMoves.get(i).y + ") does not equal (" + newpos.x + "," + newpos.y + ")");
   	}
   	return false;
   }
   
   
 	public void updatePoint(Point newpos) {
-		this.pos = newpos;
+		this.pos.x = newpos.x;
+		this.pos.y = newpos.y;
 	}
 	public abstract void updateMoves(Piece[][] board);
   public boolean capturePiece( Piece capturedPiece) {
@@ -81,12 +79,13 @@ public Object clone() {
   }
   
   
-  public String toString() {
-    return this.type;
-  }
+//  public String toString() {
+//    return this.type;
+//  }
   
   
   public void showposMoves(Graphics g) {
+	  //System.out.print(posMoves);
 	  for (int i = 0; i < posMoves.size(); i++)  {
 		  g.fillOval(((posMoves.get(i).x) * boardObj.TILESIZE) + boardObj.TILESIZE/2 , ((posMoves.get(i).y ) * boardObj.TILESIZE) + boardObj.TILESIZE/2,RAD,RAD);
 	  }
