@@ -40,19 +40,16 @@ public class Checks {
 		}
 		if (turn == "white") {
 			for (Piece attacker: black) {
-				for (Point moves: attacker.posMoves) {
-					if (moves.equals(kings[0].pos)) {
+					if (attacker.capturePiece(kings[0])) {
 						System.out.print( attacker + " on " + attacker.pos + " attacking the white king.");
 						return true;
-					}
 				}
 			}
 			} else {
 				for (Piece attacker: white) {
-					for (Point moves: attacker.posMoves) {
-						if (moves.equals(kings[1].pos)) {
-							return true;
-						}
+					if (attacker.capturePiece(kings[1])) {
+						System.out.print( attacker + " on " + attacker.pos + " attacking the black king.");
+						return true;
 					}
 				}
 			}

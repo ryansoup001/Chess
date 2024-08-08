@@ -102,7 +102,6 @@ public class Board extends JPanel {
    			g.drawString("START MENU",WIDTH/2, HEIGHT/2);
    			break;
    		case "Game Over":
-   			g.drawString("CHECKMATE BABY!",WIDTH/2, HEIGHT/2);
    		 g.drawImage(chessBoardImg,0,0,TILESIZE * 8,TILESIZE * 8,null);
 		    for (int r = 0; r < this.board.length; r++) {
 		      for (int c  = 0; c < this.board[r].length;c++) {
@@ -111,6 +110,7 @@ public class Board extends JPanel {
 		        }
 		      }
 		    }
+		    g.drawString("CHECKMATE BABY!",WIDTH/2, HEIGHT/2);
    }
   }
   public void updateBoard(Piece[][] newBoard) {   // Dont think i need this but keeping it just in case
